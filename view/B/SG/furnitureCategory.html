@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Furniture Category</title>
+    <script src="../checkCountry.js"></script>
+    <script src="../../header.js"></script>
+    <style>
+        .favorite-icon {
+            cursor: pointer;
+            color: red;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        var currentUrl = new URL(window.location.href);
+        var cat = currentUrl.searchParams.get("cat");
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var countryId = localStorage.getItem('countryId');
+            fetch(new Request('/api/getFurnitureByCat?cat=' + encodeURIComponent(cat) + '&countryId=' + countryId, {
+                method: 'GET'
+            })).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                var htmlTxt = '';
+
+                data.forEach(function (furniture) {
+                    htmlTxt += `
+                            <li class="col-md-3 col-sm-6 col-xs-12 product" style="padding-bottom: 1%;padding-top: 2%;">
+                                <span class="product-thumb-info">
+                                    <span class="product-thumb-info-image">
+                                        <span class="product-thumb-info-act">
+                                            <span class="product-thumb-info-act-left">
+                                                <a href="furnitureProductDetails.html?sku=${furniture.sku}" style="color: white"><em>View Details</em></a>
+                                            </span>
+                                        </span>
+                                        <img alt="" class="img-responsive" src="${furniture.imageURL}">
+                                    </span>
+                                    <span class="product-thumb-info-content">
+                                        <h4>${furniture.name}</h4>
+                                        <span class="product-thumb-info-act-left">
+                                            <em>Height: ${furniture.height}</em>
+                                        </span><br/>
+                                        <span class="product-thumb-info-act-left">
+                                            <em>Length: ${furniture.length}</em>
+                                        </span><br/>
+                                        <span class="product-thumb-info-act-left">
+                                            <em>Width: ${furniture.width}</em>
+                                        </span><br/>
+                                        <span class="product-thumb-info-act-left">
+                                            <em>Price: $${furniture.price}.00</em>
+                                        </span><br/>
+                                        <form action="furnitureProductDetails.html">
+                                            <input type="hidden" name="sku" value="${furniture.sku}"/>
+                                            <input type="submit" class="btn btn-primary btn-block" value="More Details"/>
+                                        </form>`;
+
+                    var memberEmail = sessionStorage.getItem('memberEmail');
+                    if (memberEmail != null && memberEmail != '') {
+                        htmlTxt += `<button class="btn btn-primary btn-block" onclick="addToCart('${furniture.sku}','${furniture.id}',${furniture.price},'${furniture.name}','${furniture.imageURL}')">Add To Cart</button>`;
+                    }
+
+                    htmlTxt += `<span class="favorite-icon" onclick="addToFavorites('${furniture.sku}','${furniture.id}',${furniture.price},'${furniture.name}','${furniture.imageURL}','${furniture.height}','${furniture.length}','${furniture.width}')">❤️</span>`;
+                    htmlTxt += `</span></span></li>`;
+                });
+
+                document.getElementById("furnituresDisplay").innerHTML = htmlTxt;
+                document.getElementById("categoryTitle").innerHTML = cat;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }, false);
+
+        function addToCart(sku, id, price, name, imageURL) {
+            var product = {
+                sku: sku,
+                id: id,
+                price: price,
+                name: name,
+                imageURL: imageURL,
+                quantity: 1  // Add a default quantity of 1
+            };
+
+            var cart = JSON.parse(sessionStorage.getItem('shoppingCart')) || [];
+            var productIndex = cart.findIndex(item => item.id === product.id);
+            if (productIndex === -1) {
+                cart.push(product);
+                sessionStorage.setItem('shoppingCart', JSON.stringify(cart));
+                alert('Product added to cart!');
+            } else {
+                alert('Product is already in cart.');
+            }
+        }
+
+
+        function addToFavorites(sku, id, price, name, imageURL, height, length, width) {
+            var product = {
+                sku: sku,
+                id: id,
+                price: price,
+                name: name,
+                imageURL: imageURL,
+                height: height,
+                length: length,
+                width: width
+            };
+
+            if (!product.height) product.height = 'N/A';
+            if (!product.length) product.length = 'N/A';
+            if (!product.width) product.width = 'N/A';
+
+            var favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            var productIndex = favorites.findIndex(fav => fav.id === product.id);
+            if (productIndex === -1) {
+                favorites.push(product);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                alert('Product added to favorites!');
+            } else {
+                alert('Product is already in favorites.');
+            }
+        }
+    </script>
+    <div class="body">
+        <script src="menu2.js"></script>
+        <div class="body">
+            <div role="main" class="main">
+                <section class="page-top">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h2>Furnitures</h2>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="container">
+                    <script src="/displayMessageLong.js"></script>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2 class="shorter"><strong id="categoryTitle"></strong></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ul id="furnituresDisplay" class="products product-thumb-info-list"
+                            style="list-style-type: none; margin-left: -3%;" data-plugin-masonry></ul>
+                    </div>
+                    <hr class="tall">
+                </div>
+            </div>
+        </div>
+        <script src="../footer.js"></script>
+    </div>
+</body>
+
+</html>

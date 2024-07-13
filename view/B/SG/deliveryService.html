@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Delivery Service</title>
+    <script src="../header2.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div id="wrapper">
+        <script src="../menu1.js"></script>
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Create Delivery Service</h1>
+                        <ol class="breadcrumb">
+                            <li><i class="icon icon-truck"></i> <a href="deliveryServiceManagement.html">Delivery Service Management</a></li>
+                            <li class="active"><i class="icon icon-plus"></i> Add Delivery Service</li>
+                        </ol>
+                    </div>
+                </div>
+                <script src="/displayMessage.js"></script>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Delivery Service</h3>
+                            </div>
+                            <div class="panel-body">
+                                <form role="form" id="addDeliveryForm" onsubmit="return false;">
+                                    <div class="form-group">
+                                        <label>Delivery Personnel</label>
+                                        <select class="form-control" name="personnel" required="true" id="personnelSelect"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Delivery Address</label>
+                                        <input class="form-control" type="text" name="address" required="true" id="addressInput">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Expected Delivery Date</label>
+                                        <input class="form-control" id="deliveryDate" type="date" required="true">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" value="Create Delivery Service" class="btn btn-lg btn-primary btn-block" onclick="addDelivery()">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementById("deliveryDate").setAttribute('min', today);
+
+            fetch(new Request('/api/getDeliveryPersonnel', {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + authToken
+                }
+            })).then(function(response) {
+                return response.json();
+            }).then(function(result) {
+                var htmlTxt = '';
+                for(var i = 0; i < result.length; i++) {
+                    htmlTxt += '<option value="' + result[i].id + '">' + result[i].name + '</option>';
+                }
+                document.getElementById('personnelSelect').innerHTML = htmlTxt;
+            }).catch(function(error) {
+                console.log(error);
+            });
+        }, false);
+
+        function addDelivery() {
+            var staff = JSON.parse(sessionStorage.getItem('staff'));
+            if (document.getElementById("addDeliveryForm").checkValidity()) {
+                var addData = {
+                    submittedBy: staff.name,
+                    personnel: document.getElementById("personnelSelect").value,
+                    address: document.getElementById("addressInput").value,
+                    expectedDeliveryDate: document.getElementById("deliveryDate").value
+                };
+                fetch(new Request('/api/addDeliveryService', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer ' + authToken
+                    },
+                    body: JSON.stringify(addData)
+                })).then(function(response) {
+                    return response.json();
+                }).then(function(data) {
+                    if(data.success) {
+                        window.location.href = '/A3/deliveryServiceManagement_Update.html?id=' + data.id;
+                    }
+                }).catch(function(error) {
+                    console.log(error);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

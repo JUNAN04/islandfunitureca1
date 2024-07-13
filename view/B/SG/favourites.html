@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Favorites</title>
+    <script src="../../header.js"></script>
+    <style>
+        .favorite-item {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .favorite-item img {
+            max-width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="body">
+        <script src="menu2.js"></script>
+        <div class="body">
+            <div role="main" class="main">
+                <section class="page-top">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h2>Favorites</h2>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="container">
+                    <div class="row">
+                        <ul id="favoritesDisplay" class="products product-thumb-info-list" style="list-style-type: none; margin-left: -3%;"></ul>
+                    </div>
+                    <hr class="tall">
+                </div>
+            </div>
+        </div>
+        <script src="../footer.js"></script>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var memberEmail = sessionStorage.getItem("memberEmail");
+            if (!memberEmail) {
+                // If the user is not logged in, redirect to the login page
+                var countryPrefix = localStorage.getItem("urlPrefix");
+                window.location.href = "/B/" + countryPrefix + "/memberLogin.html?errorMsg=Please log in to view your favorites.";
+                return; // Stop further execution
+            }
+
+            var favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            var htmlTxt = '';
+
+            if (favorites.length > 0) {
+                favorites.forEach(function (furniture) {
+                    htmlTxt += `
+                        <li class="favorite-item">
+                            <img src="${furniture.imageURL}" alt="${furniture.name}" />
+                            <h4>${furniture.name}</h4>
+                            <p>Price: $${furniture.price}.00</p>
+                            <p>Height: ${furniture.height}</p>
+                            <p>Length: ${furniture.length}</p>
+                            <p>Width: ${furniture.width}</p>
+                            <button onclick="removeFromFavourites('${furniture.id}')">Remove</button>
+                            <a href="furnitureProductDetails.html?sku=${furniture.sku}" class="btn btn-primary">View Details</a>
+                        </li>`;
+                });
+            } else {
+                htmlTxt = '<p>No favorites added yet.</p>';
+            }
+
+            document.getElementById("favoritesDisplay").innerHTML = htmlTxt;
+        }, false);
+
+        function removeFromFavourites(productId) {
+            var favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favorites = favorites.filter(favorite => favorite.id !== productId);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+
+            // Refresh the display
+            var htmlTxt = '';
+            if (favorites.length > 0) {
+                favorites.forEach(function (furniture) {
+                    htmlTxt += `
+                        <li class="favorite-item">
+                            <img src="${furniture.imageURL}" alt="${furniture.name}" />
+                            <h4>${furniture.name}</h4>
+                            <p>Price: $${furniture.price}.00</p>
+                            <p>Height: ${furniture.height}</p>
+                            <p>Length: ${furniture.length}</p>
+                            <p>Width: ${furniture.width}</p>
+                            <button onclick="removeFromFavourites('${furniture.id}')">Remove</button>
+                            <a href="furnitureProductDetails.html?sku=${furniture.sku}" class="btn btn-primary">View Details</a>
+                        </li>`;
+                });
+            } else {
+                htmlTxt = '<p>No favorites added yet.</p>';
+            }
+
+            document.getElementById("favoritesDisplay").innerHTML = htmlTxt;
+            alert('Product removed from favorites!');
+        }
+    </script>
+</body>
+</html>

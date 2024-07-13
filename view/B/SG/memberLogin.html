@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register</title>
+    <script src="../checkCountry.js"></script>
+    <script src="../../header.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="menu2.js"></script>
+</head>
+
+<body>
+    <div role="main" class="main">
+        <section class="page-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Login / Register</h2>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container">
+            <script src="/displayMessageLong.js"></script>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row featured-boxes login">
+                        <div class="col-md-6">
+                            <div class="featured-box featured-box-secundary default info-content">
+                                <div class="box-content">
+                                    <h4>I'm a Returning Customer</h4>
+                                    <form onsubmit="login(event)" id="loginForm">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label for="emailLogin">E-mail Address</label>
+                                                    <input type="email" id="emailLogin" class="form-control input-lg"
+                                                        required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <a class="pull-right" href="forgotPassword.html" tabindex="-1">(Lost
+                                                        Password?)</a>
+                                                    <label for="passwordLogin">Password</label>
+                                                    <input type="password" id="passwordLogin"
+                                                        class="form-control input-lg" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="submit" value="Login"
+                                                    class="btn btn-primary pull-right push-bottom">
+                                            </div>
+                                        </div>
+                                        <div id="loginError" class="text-danger"></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="featured-box featured-box-secundary default info-content">
+                                <div class="box-content">
+                                    <h4>Register An Account</h4>
+                                    <form onsubmit="register(event)" id="registerForm">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <label for="emailReg">E-mail Address</label>
+                                                    <input type="email" id="emailReg" class="form-control input-lg"
+                                                        required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="col-md-6">
+                                                    <label for="passwordReg">Password</label>
+                                                    <input id="passwordReg" type="password"
+                                                        class="form-control input-lg" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="repasswordReg">Re-enter Password</label>
+                                                    <input id="repasswordReg" type="password"
+                                                        class="form-control input-lg" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="col-md-3">
+                                                    <div class="g-recaptcha"
+                                                        data-sitekey="6LcLaXYUAAAAAOYUvT0g3IpuM2HLnmg47B_3Wugd"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="submit" value="Register" class="btn btn-primary">
+                                            </div>
+                                        </div>
+                                        <div id="registerError" class="text-danger"></div>
+                                        <div id="registerSuccess" class="text-success"></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../footer.js"></script>
+    </div>
+
+    <script>
+        var countryPrefix = localStorage.getItem('urlPrefix');
+
+        function displayMessage(elementId, message, isSuccess) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.color = isSuccess ? 'green' : 'red';
+        }
+
+        function login(event) {
+            event.preventDefault();
+            var email = document.getElementById("emailLogin").value;
+            var password = document.getElementById("passwordLogin").value;
+
+            if (document.getElementById("loginForm").checkValidity()) {
+                var data = { email: email, password: password };
+
+                fetch('/api/loginMember', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            displayMessage('loginError', 'Login failed. Email or password is incorrect.', false);
+                        } else {
+                            // Remove the check for account activation
+                            sessionStorage.setItem("token", data.token);
+                            fetch('/api/getMember?email=' + email, { method: 'GET' })
+                                .then(response => response.json())
+                                .then(member => {
+                                    sessionStorage.setItem('memberEmail', email);
+                                    sessionStorage.setItem('memberName', member.name);
+                                    sessionStorage.setItem('member', JSON.stringify(member));
+                                    window.location.href = "/B/" + countryPrefix + "/memberProfile.html";
+                                }).catch(console.error);
+                        }
+                    }).catch(console.error);
+            }
+        }
+
+
+        function register(event) {
+            event.preventDefault();
+            var email = document.getElementById("emailReg").value;
+            var password = document.getElementById("passwordReg").value;
+            var repassword = document.getElementById("repasswordReg").value;
+
+            if (document.getElementById("registerForm").checkValidity()) {
+                if (password !== repassword) {
+                    displayMessage('registerError', 'Passwords do not match. Please try again.', false);
+                } else if (password.length < 8) {
+                    displayMessage('registerError', 'Password is too short. It must be at least 8 characters long.', false);
+                } else {
+                    var regData = {
+                        email: email,
+                        password: password,
+                        recaptcha: grecaptcha.getResponse(),
+                        hostName: window.location.host + '/B/' + countryPrefix
+                    };
+
+                    fetch('/api/checkMemberEmailExists?email=' + email, { method: 'GET' })
+                        .then(response => response.json())
+                        .then(exist => {
+                            if (exist) {
+                                displayMessage('registerError', 'Email already exists. Please try again.', false);
+                            } else {
+                                fetch('/api/registerMember', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(regData)
+                                }).then(response => response.json())
+                                    .then(data => {
+                                        if (!data.success) {
+                                            displayMessage('registerError', data.errorMsg, false);
+                                        } else {
+                                            displayMessage('registerSuccess', 'You have registered successfully. A link will be sent to your email to activate your account.', true);
+                                        }
+                                    }).catch(console.error);
+                            }
+                        }).catch(console.error);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
