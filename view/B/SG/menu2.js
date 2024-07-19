@@ -38,70 +38,30 @@ document.write('\
                 <img alt="Island Furniture" width="180" height="80" data-sticky-width="82" data-sticky-height="40" src="../img/logo.png">\
             </a>\
         </h1>\
-        <!-- Non Logged In Menu-->\
+        <!-- Non Logged In Menu -->\
         <div id="menuLoggedOut" style="display: none;">\
             <nav>\
                 <ul class="nav nav-pills nav-top">\
-                    <li class="storeLocationMenu">\
-                        <a href="/B/' + countryPrefix + '/storeLocation.html"><i class="icon icon-map-marker"></i>Store Location</a>\
-                    </li>\
-                    <li>\
-                        <a href="/B/' + countryPrefix + '/memberLogin.html"><i class="icon icon-unlock-alt"></i>Login/Register</a>\
-                    </li>\
-                    <li>\
-                        <a id="shoppingCartLink"><i class="icon icon-shopping-cart"></i>Shopping Cart</a>\
-                    </li>\
-                    <li>\
-                        <a href="/B/' + countryPrefix + '/contactUs.html"><i class="icon icon-shopping-cart"></i>Contact Us</a>\
-                    </li>\
-                    <li>\
-                        <a href="/B/' + countryPrefix + '/favourites.html"><i class="icon icon-heart"></i>Favourites</a>\
-                    </li>\
-                    <li>\
-                        <a id="deliveryServiceLink"><i class="icon icon-truck"></i>Delivery Services</a>\
-                    </li>\
-                    <li>\
-                        <a href="/B/' + countryPrefix + '/assemblyService.html"><i class="icon icon-heart"></i>Assembly</a>\
-                    </li>\
-                    <li>\
-                        <a href="/B/' + countryPrefix + '/PlanningGuideAndCrewService.html"><i class="icon icon-heart"></i>Planning</a>\
-                    </li>\
+                    <li><a href="/B/' + countryPrefix + '/storeLocation.html"><i class="icon icon-map-marker"></i>Store Location</a></li>\
+                    <li><a href="/B/' + countryPrefix + '/memberLogin.html"><i class="icon icon-unlock-alt"></i>Login/Register</a></li>\
+                    <li><a id="shoppingCartLink"><i class="icon icon-shopping-cart"></i>Shopping Cart</a></li>\
+                    <li><a href="/B/' + countryPrefix + '/contactUs.html"><i class="icon icon-phone"></i>Contact Us</a></li>\
                 </ul>\
-                <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse">\
-                    <i class="icon icon-bars"></i>\
-                </button>\
+                <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse"><i class="icon icon-bars"></i></button>\
             </nav>\
         </div>\
-        <!-- Logged In Menu-->\
+        <!-- Logged In Menu -->\
         <div id="menuLoggedIn" style="display: none;">\
             <nav>\
                 <ul class="nav nav-pills nav-top">\
                     <li><a id="memberName"></a></li>\
-                    <li class="storeLocationMenu">\
-                        <a href="/B/' + countryPrefix + '/storeLocation.html"><i class="icon icon-map-marker"></i>Store Location</a>\
-                    </li>\
-                    <li>\
-                        <a href="/B/' + countryPrefix + '/shoppingCart.html"><i class="icon icon-shopping-cart"></i>Shopping Cart</a>\
-                    </li>\
-                    <li>\
-                        <a href="/B/' + countryPrefix + '/memberProfile.html"><i class="icon icon-user"></i>Profile</a>\
-                    </li>\
-                    <li>\
-                        <a href="/B/' + countryPrefix + '/contactUs.html"><i class="icon icon-shopping-cart"></i>Contact Us</a>\
-                    </li>\
-                    <li>\
-                        <a id="favouritesLink"><i class="icon icon-heart"></i>Favourites</a>\
-                    </li>\
-                    <li>\
-                        <a id="deliveryServiceLink"><i class="icon icon-truck"></i>Delivery Services</a>\
-                    </li>\
-                    <li>\
-                        <a href="#" onclick="logout()"><i class="icon icon-unlock-alt"></i>Logout</a>\
-                    </li>\
+                    <li><a href="/B/' + countryPrefix + '/storeLocation.html"><i class="icon icon-map-marker"></i>Store Location</a></li>\
+                    <li><a href="/B/' + countryPrefix + '/shoppingCart.html"><i class="icon icon-shopping-cart"></i>Shopping Cart</a></li>\
+                    <li><a href="/B/' + countryPrefix + '/memberProfile.html"><i class="icon icon-user"></i>Profile</a></li>\
+                    <li><a href="/B/' + countryPrefix + '/contactUs.html"><i class="icon icon-phone"></i>Contact Us</a></li>\
+                    <li><a href="#" onclick="logout()"><i class="icon icon-unlock-alt"></i>Logout</a></li>\
                 </ul>\
-                <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse">\
-                    <i class="icon icon-bars"></i>\
-                </button>\
+                <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse"><i class="icon icon-bars"></i></button>\
             </nav>\
         </div>\
     </div>\
@@ -109,28 +69,25 @@ document.write('\
         <div class="container">\
             <nav class="nav-main mega-menu">\
                 <ul class="nav nav-pills nav-main" id="mainMenu">\
-                    <li>\
-                        <a href="/B/' + countryPrefix + '/virtualStore.html">Virtual Store</a>\
-                    </li>\
+                    <li><a href="/B/' + countryPrefix + '/virtualStore.html">Virtual Store</a></li>\
                     <li class="dropdown">\
-                        <a class="dropdown-toggle" href="#">\
-                            Categories<i class="icon icon-angle-down"></i>\
-                        </a>\
+                        <a class="dropdown-toggle" href="#">Categories<i class="icon icon-angle-down"></i></a>\
                         <ul class="dropdown-menu">\
-                            <li><a id="tableDeskLink"><i class="icon icon-map-marker"></i> Tables & Desk</a></li>\
-                            <li><a href="/B/' + countryPrefix + '/furnitureCategory.html?cat=Bathroom"><i class="icon icon-map-marker"></i> Bathroom</a></li>\
-                            <li><a id="bedMattressLink"><i class="icon icon-map-marker"></i> Beds & Mattresses</a></li>\
-                            <li><a id="sofaChairLink"><i class="icon icon-map-marker"></i> Sofas & Chair</a></li>\
-                            <li><a id="cabinetStorageLink"><i class="icon icon-map-marker"></i> Cabinets & Storage</a></li>\
-                            <li><a href="/B/' + countryPrefix + '/furnitureCategory.html?cat=Lightings"><i class="icon icon-map-marker"></i> Lightings</a></li>\
-                            <li><a href="/B/' + countryPrefix + '/furnitureCategory.html?cat=Study"><i class="icon icon-map-marker"></i> Study</a></li>\
-                            <li><a href="/B/' + countryPrefix + '/furnitureCategory.html?cat=Children"><i class="icon icon-map-marker"></i> Children</a></li>\
-                            <li><a id="favouritesLink"><i class="icon icon-heart"></i> Favourites</a></li>\
+                            <li><a id="tableDeskLink"><i class="icon icon-table"></i> Tables & Desk</a></li>\
+                            <li><a href="/B/' + countryPrefix + '/furnitureCategory.html?cat=Bathroom"><i class="icon icon-bath"></i> Bathroom</a></li>\
+                            <li><a id="bedMattressLink"><i class="icon icon-bed"></i> Beds & Mattresses</a></li>\
+                            <li><a id="sofaChairLink"><i class="icon icon-chair"></i> Sofas & Chair</a></li>\
+                            <li><a id="cabinetStorageLink"><i class="icon icon-cabinet"></i> Cabinets & Storage</a></li>\
+                            <li><a href="/B/' + countryPrefix + '/furnitureCategory.html?cat=Lightings"><i class="icon icon-light"></i> Lightings</a></li>\
+                            <li><a href="/B/' + countryPrefix + '/furnitureCategory.html?cat=Study"><i class="icon icon-study"></i> Study</a></li>\
+                            <li><a href="/B/' + countryPrefix + '/furnitureCategory.html?cat=Children"><i class="icon icon-child"></i> Children</a></li>\
                         </ul>\
                     </li>\
                     <li><a id="retailProductLink"><i class="icon icon-coffee"></i> Retail Products</a></li>\
-                    <li><a id="shoppingCartLink"><i class="icon icon-shopping-cart"></i> Shopping Cart</a></li>\
+                    <li><a id="favouritesLink"><i class="icon icon-heart"></i> Favourites</a></li>\
                     <li><a id="deliveryServiceLink"><i class="icon icon-truck"></i> Delivery Services</a></li>\
+                    <li><a id="assemblyServiceLink"><i class="icon icon-wrench"></i> Assembly</a></li>\
+                    <li><a id="PlanningGuideAndCrewServiceLink"><i class="icon icon-book"></i> Planning</a></li>\
                 </ul>\
             </nav>\
         </div>\
