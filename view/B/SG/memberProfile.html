@@ -163,11 +163,15 @@
             return startDate.toLocaleDateString("en-US", options);
         }
 
-        function submitForm() {
+        function submitForm(event) {
+            event.preventDefault(); // Prevent default form submission
+
             var oldPassword = document.getElementById('oldPassword').value;
             var password = document.getElementById("password").value;
             var repassword = document.getElementById("repassword").value;
             var ok = true;
+
+            var member = JSON.parse(sessionStorage.getItem('member'));
 
             if (document.getElementById("profileForm").checkValidity()) {
                 if (oldPassword != "" && password != "" && repassword != "") {
@@ -201,12 +205,15 @@
                               alert("Old password is incorrect.");
                               ok = false;
                           }
-                      }).catch(error => console.log(error));
+                      }).catch(error => {
+                          console.log(error);
+                          ok = false;
+                      });
                 }
 
                 if (ok) {
                     var data = {
-                        id: member.id, // Include the member ID
+                        id: member.id,
                         email: document.getElementById("email").value,
                         name: document.getElementById("name").value,
                         phone: document.getElementById("phone").value,
@@ -217,7 +224,7 @@
                         age: document.getElementById("age").value,
                         income: document.getElementById("income").value,
                         sla: document.getElementById("serviceLevelAgreement").checked ? 1 : 0,
-                        password: password || null // Only send the new password if it's being updated
+                        password: password || null
                     };
 
                     fetch(new Request('/api/updateMember', {
@@ -240,15 +247,13 @@
                               alert("Successfully Updated!");
 
                           } else {
-                              alert("Update failed: " + data.errorMsg);
+                              console.log("Update failed: ", data.errorMsg);
                           }
                       }).catch(error => {
-                          console.log(error);
-                          alert("Unable to Update.");
+                          console.log("Unable to Update. Error: ", error);
                       });
                 }
             }
-            return false; // Prevent default form submission
         }
 
         function pdpaWindow() {
@@ -285,7 +290,7 @@
                         </ul>
                         <div class="tab-content">
                             <div id="overview" class="tab-pane active">
-                                <form onsubmit="return submitForm()" id="profileForm">
+                                <form onsubmit="submitForm(event)" id="profileForm">
                                     <h4>Personal Information</h4>
                                     <div class="form-group">
                                         <label>Name</label>
